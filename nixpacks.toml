@@ -1,5 +1,5 @@
 [phases.build]
-cmds = ["./gradlew clean bootJar -x test"]
+cmds = ["./gradlew clean bootJar -x test --no-daemon"]
 
-[phases.start]
+[start]
 cmd = "java -jar build/libs/*.jar"
