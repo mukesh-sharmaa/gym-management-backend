@@ -1,5 +1,6 @@
 package com.gymapp.gym_management.controller;
 
+import com.gymapp.gym_management.dto.ChangePasswordRequest;
 import com.gymapp.gym_management.entity.User;
 import com.gymapp.gym_management.repository.UserRepository;
 import com.gymapp.gym_management.security.JwtUtil;
@@ -124,6 +125,19 @@ public class AuthController {
             return ResponseEntity.ok("Profile updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(401).body("Unauthorized");
+        }
+    }
+
+    // ✅ Change password
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        try {
+            userService.changePassword(request);
+            return ResponseEntity.ok("Password changed successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to change password");
         }
     }
 
