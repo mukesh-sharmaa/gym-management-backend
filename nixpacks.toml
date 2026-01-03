@@ -2,7 +2,7 @@
 nixPkgs = ["jdk21", "gradle"]
 
 [phases.build]
-cmds = ["./gradlew clean bootJar -x test --no-daemon"]
+cmds = ["chmod +x gradlew", "./gradlew clean bootJar -x test --no-daemon"]
 
 [start]
 cmd = "java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/gym-management-0.0.1-SNAPSHOT.jar"
