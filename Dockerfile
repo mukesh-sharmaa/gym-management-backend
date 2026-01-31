@@ -19,11 +19,24 @@ RUN ./gradlew clean bootJar -x test --no-daemon
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
+# Create non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
 # Copy the built JAR from build stage
 COPY --from=build /app/build/libs/gym-management-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the port (Railway will set PORT env variable)
+# Set ownership to non-root user
+RUN chown -R appuser:appgroup /app
+USER appuser
+
+# Expose the port (Cloud Run sets PORT env variable, defaults to 8080)
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
+# Cloud Run: Use shell form to expand $PORT variable
+# JVM optimizations for containerized environments
+ENTRYPOINT exec java \
+    -Dserver.port=${PORT:-8080} \
+    -XX:+UseContainerSupport \
+    -XX:MaxRAMPercentage=75.0 \
+    -Djava.security.egd=file:/dev/./urandom \
+    -jar app.jar

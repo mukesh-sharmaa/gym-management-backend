@@ -1,0 +1,39 @@
+# Git files
+.git
+.gitignore
+
+# Build outputs
+build/
+.gradle/
+out/
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Local environment
+.env
+.env.local
+*.local
+
+# Documentation
+README.md
+docs/
+
+# Test files (not needed in production image)
+src/test/
+
+# Railway specific (no longer needed)
+nixpacks.toml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
