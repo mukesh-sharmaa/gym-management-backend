@@ -33,10 +33,15 @@ USER appuser
 EXPOSE 8080
 
 # Cloud Run: Use shell form to expand $PORT variable
-# JVM optimizations for containerized environments
+# JVM optimizations for faster startup and containerized environments
 ENTRYPOINT exec java \
     -Dserver.port=${PORT:-8080} \
     -XX:+UseContainerSupport \
     -XX:MaxRAMPercentage=75.0 \
+    -XX:+TieredCompilation \
+    -XX:TieredStopAtLevel=1 \
+    -Xss256k \
     -Djava.security.egd=file:/dev/./urandom \
+    -Dspring.jmx.enabled=false \
+    -Dspring.config.location=classpath:/application.properties,classpath:/application-prod.properties \
     -jar app.jar
